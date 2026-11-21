@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘 뭐 입지? - 나만의 OOTD 코디 추천</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&family=Gowun+Dodum&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <div id="toast" class="toast-popup">
+    <span id="toastMsg">항목을 선택해줘!</span>
+  </div>
+
+  <main class="app-container">
+
+    <!-- ═══════════════════ LANDING VIEW (STEP 0) ═══════════════════ -->
+    <section id="viewLanding" class="view-step active" style="text-align:center; padding:16px 8px;">
+      <div style="font-size:4rem; margin-bottom:8px;">👗👔✨</div>
+      <h1 class="main-title">오늘 뭐 입지?</h1>
+      <p class="subtitle">날씨랑 취향만 알려줘, 내가 오늘 코디 골라줄게! ✨</p>
+      <button id="btnStart" class="btn btn-primary" style="width:100%; font-size:1.15rem; padding:18px;">
+        코디 추천 받기 ✨
+      </button>
+    </section>
+
+    <!-- ═══════════════════ MULTI-STEP INPUT FORM ═══════════════════ -->
+    <section id="viewForm" style="display:none;">
+
+      <!-- Progress Bar -->
+      <div class="progress-section">
+        <div class="progress-info">
+          <span id="stepBadgeText">1단계 / 5단계</span>
+          <span id="stepPercentage">20%</span>
+        </div>
+        <div class="progress-track">
+          <div id="progressBar" class="progress-bar" style="width:20%;"></div>
+        </div>
+      </div>
+
+      <!-- STEP 1 : 성별 & 체형 -->
+      <div id="step1" class="view-step">
+        <div class="step-badge">👤 1. 성별 &amp; 체형 정보</div>
+        <h2 class="step-question">성별과 키, 몸무게를 알려줘</h2>
+        <p class="step-desc">어울리는 실루엣과 예쁜 기장감을 찾는 데만 활용할게!</p>
+
+        <div class="gender-grid" id="genderGrid">
+          <button type="button" class="gender-btn selected" data-gender="female">
+            <span style="font-size:1.5rem;">👩</span><span>여성 (여자)</span>
+          </button>
+          <button type="button" class="gender-btn" data-gender="male">
+            <span style="font-size:1.5rem;">👨</span><span>남성 (남자)</span>
+          </button>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-wrap">
+            <label class="form-label">내 키</label>
+            <span class="slider-val-display"><span id="valHeight">165</span> cm</span>
+          </div>
+          <input type="range" id="sliderHeight" min="140" max="190" step="1" value="165">
+          <div class="range-limits"><span>140cm</span><span>165cm</span><span>190cm</span></div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-wrap">
+            <label class="form-label">내 몸무게</label>
+            <span class="slider-val-display"><span id="valWeight">54</span> kg</span>
+          </div>
+          <input type="range" id="sliderWeight" min="35" max="110" step="1" value="54">
+          <div class="range-limits"><span>35kg</span><span>70kg</span><span>110kg</span></div>
+        </div>
+      </div>
+
+      <!-- STEP 2 : 날씨 & 기온 -->
+      <div id="step2" class="view-step">
+        <div class="step-badge">🌤️ 2. 날씨 &amp; 기온</div>
+        <h2 class="step-question">오늘 날씨는 어때?</h2>
+        <div class="form-group">
+          <div class="form-label-wrap">
+            <label class="form-label">오늘 날씨 <span class="required-mark">*</span></label>
+          </div>
+          <div class="button-grid cols-3" id="weatherGrid">
+            <button type="button" class="choice-card-btn" data-weather="맑음"><span class="card-icon">☀️</span><span>맑음</span></button>
+            <button type="button" class="choice-card-btn" data-weather="흐림"><span class="card-icon">☁️</span><span>흐림</span></button>
+            <button type="button" class="choice-card-btn" data-weather="비"><span class="card-icon">🌧️</span><span>비</span></button>
+            <button type="button" class="choice-card-btn" data-weather="눈"><span class="card-icon">❄️</span><span>눈</span></button>
+            <button type="button" class="choice-card-btn" data-weather="바람 강함"><span class="card-icon">💨</span><span>바람 강함</span></button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-wrap">
+            <label class="form-label">현재 기온 <span class="required-mark">*</span></label>
+            <span class="slider-val-display" id="tempDisplayWrap"><span id="valTemp">18</span> ℃</span>
+          </div>
+          <input type="range" id="sliderTemp" min="-15" max="35" step="1" value="18">
+          <div class="range-limits">
+            <span style="color:#5B92E5;">-15℃ (추워요)</span>
+            <span style="color:#62B6B7;">15℃</span>
+            <span style="color:#F06248;">35℃ (더워요)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 : 스타일 & 색상 -->
+      <div id="step3" class="view-step">
+        <div class="step-badge">💖 3. 선호 스타일 &amp; 색상</div>
+        <h2 class="step-question">어떤 분위기를 좋아해?</h2>
+
+        <div class="form-group">
+          <div class="form-label-wrap">
+            <label class="form-label">선호 스타일 <span class="required-mark">*</span></label>
+            <span class="counter-text" id="styleCountText">최대 2개 (0/2)</span>
+          </div>
+          <div class="button-grid cols-3" id="styleGrid">
+            <button type="button" class="choice-card-btn" data-style="캐주얼"><span class="card-icon">👟</span><span>캐주얼</span></button>
+            <button type="button" class="choice-card-btn" data-style="미니멀"><span class="card-icon">🌿</span><span>미니멀</span></button>
+            <button type="button" class="choice-card-btn" data-style="스트릿"><span class="card-icon">🛹</span><span>스트릿</span></button>
+            <button type="button" class="choice-card-btn" data-style="러블리"><span class="card-icon">🎀</span><span>러블리</span></button>
+            <button type="button" class="choice-card-btn" data-style="클래식"><span class="card-icon">👜</span><span>클래식</span></button>
+            <button type="button" class="choice-card-btn" data-style="스포티"><span class="card-icon">🎾</span><span>스포티</span></button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-wrap">
+            <label class="form-label">선호 색상 <span class="required-mark">*</span></label>
+            <span class="counter-text" id="colorCountText">최대 3개 (0/3)</span>
+          </div>
+          <div class="color-chips-grid" id="colorGrid">
+            <button type="button" class="color-chip-btn" data-color="화이트"><span class="color-dot" style="background:#FFF;border:1px solid #ddd;"></span><span class="color-name">화이트</span></button>
+            <button type="button" class="color-chip-btn" data-color="아이보리"><span class="color-dot" style="background:#FBF8EE;"></span><span class="color-name">아이보리</span></button>
+            <button type="button" class="color-chip-btn" data-color="베이지"><span class="color-dot" style="background:#F0E5D5;"></span><span class="color-name">베이지</span></button>
+            <button type="button" class="color-chip-btn" data-color="그레이"><span class="color-dot" style="background:#D4D5D9;"></span><span class="color-name">그레이</span></button>
+            <button type="button" class="color-chip-btn" data-color="블랙"><span class="color-dot" style="background:#333339;"></span><span class="color-name">블랙</span></button>
+            <button type="button" class="color-chip-btn" data-color="네이비"><span class="color-dot" style="background:#3B4868;"></span><span class="color-name">네이비</span></button>
+            <button type="button" class="color-chip-btn" data-color="라벤더"><span class="color-dot" style="background:#D4C4F5;"></span><span class="color-name">라벤더</span></button>
+            <button type="button" class="color-chip-btn" data-color="민트"><span class="color-dot" style="background:#BDEFE0;"></span><span class="color-name">민트</span></button>
+            <button type="button" class="color-chip-btn" data-color="하늘"><span class="color-dot" style="background:#BEE3F8;"></span><span class="color-name">하늘</span></button>
+            <button type="button" class="color-chip-btn" data-color="핑크"><span class="color-dot" style="background:#FFD0DD;"></span><span class="color-name">핑크</span></button>
+            <button type="button" class="color-chip-btn" data-color="버터옐로"><span class="color-dot" style="background:#FFF099;"></span><span class="color-name">버터옐로</span></button>
+            <button type="button" class="color-chip-btn" data-color="브라운"><span class="color-dot" style="background:#9C775D;"></span><span class="color-name">브라운</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4 : 사진 & 피하고 싶은 옷 -->
+      <div id="step4" class="view-step">
+        <div class="step-badge">🚫 4. 사진 &amp; 피하고 싶은 옷</div>
+        <h2 class="step-question">불편한 옷은 쏙 뺄게!</h2>
+
+        <div class="form-group">
+          <div class="form-label-wrap">
+            <label class="form-label">레퍼런스 사진 첨부 <span class="optional-mark">(선택)</span></label>
+          </div>
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" id="filePhoto" accept="image/*" style="display:none;">
+            <div style="font-size:2rem;">📸</div>
+            <div style="font-weight:600;">사진을 터치해서 업로드해봐</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:3px;">사진 속 대표 색상 3가지를 캔버스로 추출해줄게!</div>
+          </div>
+          <div id="photoResultWrap" class="photo-result-wrap">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:0.88rem;font-weight:600;color:#6C54A4;">사진 추출 컬러</span>
+              <button type="button" id="btnRemovePhoto" style="background:none;border:none;color:#c55;cursor:pointer;">사진 지우기</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <img id="imgPreview" class="preview-img-thumb" src="" alt="미리보기">
+              <div id="extractedChipsList" class="extracted-chips"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-label-wrap">
+            <label class="form-label">피하고 싶은 옷 <span class="required-mark">*</span></label>
+            <span class="optional-mark">복수 선택 가능</span>
+          </div>
+          <div class="avoid-grid" id="avoidGrid">
+            <button type="button" class="avoid-chip" data-avoid="크롭티">크롭티</button>
+            <button type="button" class="avoid-chip" data-avoid="스키니진">스키니진</button>
+            <button type="button" class="avoid-chip" data-avoid="짧은 치마">짧은 치마</button>
+            <button type="button" class="avoid-chip" data-avoid="민소매">민소매</button>
+            <button type="button" class="avoid-chip" data-avoid="니트">니트</button>
+            <button type="button" class="avoid-chip" data-avoid="와이드팬츠">와이드팬츠</button>
+            <button type="button" class="avoid-chip" data-avoid="힐">힐</button>
+            <button type="button" class="avoid-chip" data-avoid="없음" id="chipAvoidNone">없음 (모두 좋아)</button>
+          </div>
+          <input type="text" id="inputCustomAvoid" class="custom-input" placeholder="그 외 피하고 싶은 옷이 있다면 직접 입력 (예: 가죽자켓)">
+        </div>
+      </div>
+
+      <!-- STEP 5 : 오늘 일정 -->
+      <div id="step5" class="view-step">
+        <div class="step-badge">📝 5. 오늘 특별한 일정</div>
+        <h2 class="step-question">오늘 무슨 일 있어?</h2>
+        <div class="form-group">
+          <textarea id="textSituation" class="textarea-box" placeholder="예: 오늘 중요한 발표가 있어 / 많이 걸어야 해 / 데이트가 있어!"></textarea>
+          <div class="tag-suggestions" id="quickTagList">
+            <button type="button" class="quick-tag" data-tag="오늘 발표가 있어서 단정하게 입고 싶어.">💼 발표</button>
+            <button type="button" class="quick-tag" data-tag="면접 일정이 있어서 신뢰감 있고 단정해야 해.">👔 면접</button>
+            <button type="button" class="quick-tag" data-tag="데이트 날이라 설레고 멋지게 입고 싶어.">💖 데이트</button>
+            <button type="button" class="quick-tag" data-tag="여행 가서 편하면서도 사진 잘 나왔으면 좋겠어.">✈️ 여행</button>
+            <button type="button" class="quick-tag" data-tag="가볍게 운동하고 산책할 예정이야.">🏃 운동</button>
+            <button type="button" class="quick-tag" data-tag="오늘 많이 걸어야 해서 발이 편해야 해.">👟 많이 걸어요</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button type="button" id="btnPrev" class="btn btn-prev">‹ 이전</button>
+        <button type="button" id="btnNext" class="btn btn-next">다음 ›</button>
+      </div>
+    </section>
+
+    <!-- ═══════════════════ RESULT VIEW ═══════════════════ -->
+    <section id="viewResult" class="view-step" style="display:none;">
+
+      <div class="receipt-header">
+        <div class="receipt-badge">OUTFIT RECEIPT</div>
+        <div class="receipt-sub">오늘 너에게 딱 맞춘 데일리 룩북이야 ✨</div>
+      </div>
+
+      <div class="lookbook-stage" id="lookbookStage">
+        <svg class="connector-svg-layer" id="connectorSvg" viewBox="0 0 620 520" preserveAspectRatio="none">
+          <path id="line1" class="leader-line" d="M 186 90 L 250 90 L 290 170" />
+          <circle id="dot1" class="anchor-dot" cx="290" cy="170" />
+          <path id="line2" class="leader-line" d="M 434 110 L 370 110 L 325 200" />
+          <circle id="dot2" class="anchor-dot" cx="325" cy="200" />
+          <path id="line3" class="leader-line" d="M 186 425 L 260 425 L 285 260" />
+          <circle id="dot3" class="anchor-dot" cx="285" cy="260" />
+          <path id="line4" class="leader-line" d="M 434 445 L 350 445 L 325 450" />
+          <circle id="dot4" class="anchor-dot" cx="325" cy="450" />
+        </svg>
+
+        <div class="center-mannequin-wrap" id="mannequinContainer"></div>
+
+        <div class="lookbook-card pos-outer-or-top" id="boxCard1">
+          <div class="lookbook-tag" id="tagCard1">OUTER</div>
+          <div class="lookbook-item-name" id="nameCard1">-</div>
+          <div class="lookbook-item-desc" id="descCard1">-</div>
+        </div>
+        <div class="lookbook-card pos-bottom-or-top" id="boxCard2">
+          <div class="lookbook-tag" id="tagCard2">TOP</div>
+          <div class="lookbook-item-name" id="nameCard2">-</div>
+          <div class="lookbook-item-desc" id="descCard2">-</div>
+        </div>
+        <div class="lookbook-card pos-accessory" id="boxCard3">
+          <div class="lookbook-tag" id="tagCard3">ACCESSORY</div>
+          <div class="lookbook-item-name" id="nameCard3">-</div>
+          <div class="lookbook-item-desc" id="descCard3">-</div>
+        </div>
+        <div class="lookbook-card pos-shoes" id="boxCard4">
+          <div class="lookbook-tag" id="tagCard4">SHOES</div>
+          <div class="lookbook-item-name" id="nameCard4">-</div>
+          <div class="lookbook-item-desc" id="descCard4">-</div>
+        </div>
+      </div>
+
+      <div class="result-section-card">
+        <div class="section-card-title">🎨 추천 컬러 조합</div>
+        <div class="color-combo-list" id="colorComboContainer"></div>
+      </div>
+
+      <div class="result-section-card">
+        <div class="section-card-title">💌 내가 이렇게 추천한 이유</div>
+        <div class="reason-quote-box" id="reasonBox"></div>
+      </div>
+
+      <div class="result-section-card">
+        <div class="section-card-title">💡 꼭 고려해야 하는 조건</div>
+        <div id="conditionsBox" style="font-size:0.92rem;line-height:1.5;"></div>
+        <div class="avoid-confirm-badge">
+          <span>✅</span>
+          <span>피하고 싶은 옷은 제외했어</span>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button type="button" id="btnReroll" class="btn btn-reroll">🔄 다른 코디 보기</button>
+        <button type="button" id="btnRestart" class="btn btn-prev">🏠 처음부터 다시</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
